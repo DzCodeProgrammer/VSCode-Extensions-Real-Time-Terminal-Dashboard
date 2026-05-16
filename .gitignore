@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.venv/
+uvicorn.*.log
+node_modules/
+out/
+*.vsix

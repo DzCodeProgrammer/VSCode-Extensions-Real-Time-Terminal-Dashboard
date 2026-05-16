@@ -1,0 +1,60 @@
+{
+  "name": "real-time-terminal-dashboard",
+  "displayName": "Real-Time Terminal Dashboard",
+  "description": "Realtime cyberpunk system, terminal, process, and Git telemetry for VSCode.",
+  "version": "0.1.0",
+  "publisher": "local-devtools",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:realtimeTerminalDashboard.open",
+    "onCommand:realtimeTerminalDashboard.startBackend",
+    "onCommand:realtimeTerminalDashboard.stopBackend"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "realtimeTerminalDashboard.open",
+        "title": "Real-Time Terminal Dashboard: Open Dashboard"
+      },
+      {
+        "command": "realtimeTerminalDashboard.startBackend",
+        "title": "Real-Time Terminal Dashboard: Start Backend"
+      },
+      {
+        "command": "realtimeTerminalDashboard.stopBackend",
+        "title": "Real-Time Terminal Dashboard: Stop Backend"
+      }
+    ],
+    "configuration": {
+      "title": "Real-Time Terminal Dashboard",
+      "properties": {
+        "realtimeTerminalDashboard.backendPort": {
+          "type": "number",
+          "default": 8765,
+          "description": "Local FastAPI backend port."
+        },
+        "realtimeTerminalDashboard.pythonPath": {
+          "type": "string",
+          "default": "python",
+          "description": "Python executable used to launch the backend."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "start": "echo \"No build required. Press F5 in VSCode from the workspace root.\"",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.4.5"
+  }
+}

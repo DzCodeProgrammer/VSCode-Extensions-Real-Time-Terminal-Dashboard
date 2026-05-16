@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Real-Time Terminal Dashboard</title>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <link rel="stylesheet" href="/static/css/dashboard.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="command-bar">
+        <div>
+          <p class="eyebrow">REALTIME OPS CONSOLE</p>
+          <h1>Terminal Dashboard</h1>
+        </div>
+        <div class="status-pill">
+          <span class="pulse"></span>
+          Low-load stream
+        </div>
+      </header>
+
+      <section class="chart-band">
+        <article class="surface chart-panel">
+          <header>
+            <h2>System Pulse</h2>
+            <span id="sample-time">{{ snapshot.timestamp.strftime("%H:%M:%S UTC") }}</span>
+          </header>
+          <canvas id="pulseChart" width="900" height="260"></canvas>
+        </article>
+      </section>
+
+      <div
+        id="telemetry-root"
+        hx-get="/partials/telemetry"
+        hx-trigger="load, every 10s"
+        hx-swap="innerHTML"
+      >
+        {% include "partials.html" %}
+      </div>
+    </main>
+
+    <script src="/static/js/dashboard.js"></script>
+  </body>
+</html>

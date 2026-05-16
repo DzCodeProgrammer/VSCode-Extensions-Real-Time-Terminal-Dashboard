@@ -1,0 +1,226 @@
+:root {
+  color-scheme: dark;
+  --bg: #06070d;
+  --surface: rgba(13, 18, 31, 0.78);
+  --line: rgba(79, 232, 255, 0.22);
+  --cyan: #4fe8ff;
+  --pink: #ff3df2;
+  --green: #74ff8b;
+  --text: #eef7ff;
+  --muted: #88a1b8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    linear-gradient(135deg, rgba(79, 232, 255, 0.14), transparent 28%),
+    linear-gradient(315deg, rgba(255, 61, 242, 0.16), transparent 26%),
+    var(--bg);
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 100% 4px;
+  mix-blend-mode: screen;
+}
+
+.shell {
+  width: min(1440px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 40px;
+}
+
+.command-bar,
+.surface,
+.metric-panel {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: 0 0 28px rgba(79, 232, 255, 0.08), inset 0 0 24px rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(18px);
+}
+
+.command-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px;
+  border-radius: 8px;
+}
+
+.eyebrow,
+.panel-label {
+  color: var(--cyan);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  margin-top: 6px;
+  font-size: clamp(2rem, 5vw, 4.25rem);
+  font-weight: 900;
+  line-height: 0.95;
+  text-shadow: 0 0 18px rgba(79, 232, 255, 0.32);
+}
+
+h2 {
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid rgba(116, 255, 139, 0.35);
+  color: var(--green);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--green);
+  box-shadow: 0 0 16px var(--green);
+}
+
+.chart-band,
+#telemetry-root {
+  margin-top: 18px;
+}
+
+.surface,
+.metric-panel {
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.surface header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  color: var(--muted);
+}
+
+.chart-panel {
+  min-height: 330px;
+}
+
+.chart-panel canvas {
+  display: block;
+  width: 100%;
+  height: 260px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.metric-panel strong {
+  display: block;
+  margin-top: 12px;
+  font-size: clamp(1.5rem, 4vw, 2.8rem);
+  line-height: 1;
+}
+
+.metric-panel span {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.split-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.process-table {
+  display: grid;
+  gap: 8px;
+}
+
+.process-row {
+  display: grid;
+  grid-template-columns: 72px minmax(120px, 1fr) 96px 96px;
+  gap: 10px;
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.process-row strong {
+  overflow: hidden;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.terminal-log {
+  display: grid;
+  gap: 8px;
+  min-height: 260px;
+  max-height: 360px;
+  overflow: auto;
+  color: #c7f9ff;
+  font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+  font-size: 0.84rem;
+}
+
+.terminal-log span {
+  color: var(--pink);
+}
+
+@media (max-width: 920px) {
+  .dashboard-grid,
+  .split-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .command-bar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 560px) {
+  .process-row {
+    grid-template-columns: 58px minmax(0, 1fr);
+  }
+
+  .process-row span:nth-child(n + 3) {
+    display: none;
+  }
+}

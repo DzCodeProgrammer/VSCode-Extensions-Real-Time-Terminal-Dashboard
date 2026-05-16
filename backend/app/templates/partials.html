@@ -1,0 +1,53 @@
+<section id="telemetry-grid" class="dashboard-grid">
+  <article class="metric-panel">
+    <div class="panel-label">CPU</div>
+    <strong>{{ "%.1f"|format(snapshot.cpu.percent) }}%</strong>
+    <span>{{ snapshot.cpu.cores|length }} cores online</span>
+  </article>
+  <article class="metric-panel">
+    <div class="panel-label">RAM</div>
+    <strong>{{ "%.1f"|format(snapshot.memory.percent) }}%</strong>
+    <span>{{ (snapshot.memory.used / 1073741824)|round(2) }} GB used</span>
+  </article>
+  <article class="metric-panel">
+    <div class="panel-label">Network</div>
+    <strong>{{ (snapshot.network.bytes_recv / 1048576)|round(1) }} MB</strong>
+    <span>{{ (snapshot.network.bytes_sent / 1048576)|round(1) }} MB sent</span>
+  </article>
+  <article class="metric-panel">
+    <div class="panel-label">Git</div>
+    <strong>{{ snapshot.git.branch or "No repo" }}</strong>
+    <span>{{ snapshot.git.changed_files }} changed files</span>
+  </article>
+</section>
+
+<section class="split-grid">
+  <article class="surface">
+    <header>
+      <h2>Live Processes</h2>
+      <span>{{ snapshot.processes|length }} tracked</span>
+    </header>
+    <div class="process-table">
+      {% for process in snapshot.processes %}
+      <div class="process-row">
+        <span>{{ process.pid }}</span>
+        <strong>{{ process.name }}</strong>
+        <span>{{ "%.1f"|format(process.cpu_percent) }}% CPU</span>
+        <span>{{ "%.1f"|format(process.memory_percent) }}% RAM</span>
+      </div>
+      {% endfor %}
+    </div>
+  </article>
+
+  <article class="surface terminal-surface">
+    <header>
+      <h2>Terminal Stream</h2>
+      <span>{{ snapshot.timestamp.strftime("%H:%M:%S UTC") }}</span>
+    </header>
+    <div class="terminal-log">
+      {% for entry in snapshot.terminal %}
+      <p><span>[{{ entry.timestamp.strftime("%H:%M:%S") }}]</span> {{ entry.message }}</p>
+      {% endfor %}
+    </div>
+  </article>
+</section>
