@@ -27,6 +27,11 @@ export class BackendManager implements vscode.Disposable {
   }
 
   public async start(): Promise<void> {
+    if (await this.isHealthy()) {
+      this.setStatus("online");
+      return;
+    }
+
     if (this.process && !this.process.killed) {
       await this.refreshHealth();
       return;
@@ -71,7 +76,7 @@ export class BackendManager implements vscode.Disposable {
     this.process.on("exit", (code) => {
       this.output.appendLine(`Backend exited with code ${code ?? "unknown"}`);
       this.process = undefined;
-      this.setStatus("offline");
+      void this.refreshHealth();
     });
 
     const healthy = await this.waitUntilHealthy();
@@ -110,7 +115,7 @@ export class BackendManager implements vscode.Disposable {
       this.output.appendLine("Installing backend Python dependencies.");
       await this.runProcess(this.venvPythonPath, ["-m", "pip", "install", "-r", "requirements.txt"], this.backendPath);
       vscode.window.showInformationMessage("Dashboard backend dependencies installed.");
-      this.setStatus("offline");
+      await this.refreshHealth();
     } catch (error) {
       this.output.appendLine(`Dependency install failed: ${String(error)}`);
       this.setStatus("error");
@@ -179,9 +184,9 @@ export class BackendManager implements vscode.Disposable {
 
   private async isHealthy(): Promise<boolean> {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 1200);
+    const timer = setTimeout(() => controller.abort(), 4000);
     try {
-      const response = await fetch(`${this.baseUrl}/api/telemetry`, { signal: controller.signal });
+      const response = await fetch(`${this.baseUrl}/api/health`, { signal: controller.signal });
       return response.ok;
     } catch {
       return false;

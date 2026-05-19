@@ -29,6 +29,11 @@ def create_app() -> FastAPI:
     app.include_router(dashboard.router)
     app.include_router(telemetry.router)
     app.include_router(telemetry_socket.router)
+
+    @app.get("/api/health", tags=["health"])
+    async def health_check() -> dict[str, str]:
+        return {"status": "ok"}
+
     return app
 
 
