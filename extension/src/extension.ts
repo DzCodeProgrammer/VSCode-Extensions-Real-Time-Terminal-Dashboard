@@ -1,15 +1,25 @@
 import * as vscode from "vscode";
 import { BackendManager } from "./backendManager";
+import { BackendStatusBar } from "./backendStatusBar";
 import { DashboardWebviewProvider } from "./webviewProvider";
 
 export function activate(context: vscode.ExtensionContext): void {
   const backend = new BackendManager(context);
-  context.subscriptions.push(backend);
+  const statusBar = new BackendStatusBar(backend);
+  context.subscriptions.push(backend, statusBar);
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("realtimeTerminalDashboard.installBackendDependencies", async () => {
+      await backend.installDependencies();
+    }),
+  );
 
   context.subscriptions.push(
     vscode.commands.registerCommand("realtimeTerminalDashboard.startBackend", async () => {
       await backend.start();
-      vscode.window.showInformationMessage("Real-Time Terminal Dashboard backend started.");
+      if (backend.currentStatus === "online") {
+        vscode.window.showInformationMessage("Real-Time Terminal Dashboard backend started.");
+      }
     }),
   );
 
@@ -23,9 +33,13 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.commands.registerCommand("realtimeTerminalDashboard.open", async () => {
       await backend.start();
-      new DashboardWebviewProvider(backend.baseUrl).open();
+      if (backend.currentStatus === "online") {
+        new DashboardWebviewProvider(backend.baseUrl).open();
+      }
     }),
   );
+
+  void backend.refreshHealth();
 }
 
 export function deactivate(): void {

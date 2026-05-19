@@ -85,3 +85,23 @@ cd extension
 npm.cmd install
 npm.cmd run compile
 ```
+## VSCode Extension UX
+
+After pressing `F5`, the Extension Development Host shows a status bar item:
+
+- `Dashboard Offline`: backend is not reachable.
+- `Dashboard Starting`: backend launch is in progress.
+- `Dashboard Online`: backend health check passed.
+- `Dashboard Installing`: Python environment/dependencies are being installed.
+- `Dashboard Error`: startup or install failed; check the output channel.
+
+Command Palette actions:
+
+```text
+Real-Time Terminal Dashboard: Open Dashboard
+Real-Time Terminal Dashboard: Start Backend
+Real-Time Terminal Dashboard: Stop Backend
+Real-Time Terminal Dashboard: Install Backend Dependencies
+```
+
+If `.venv` is missing, opening the dashboard offers to install backend dependencies automatically.

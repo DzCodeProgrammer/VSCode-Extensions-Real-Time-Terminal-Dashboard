@@ -13,7 +13,9 @@
   "activationEvents": [
     "onCommand:realtimeTerminalDashboard.open",
     "onCommand:realtimeTerminalDashboard.startBackend",
-    "onCommand:realtimeTerminalDashboard.stopBackend"
+    "onCommand:realtimeTerminalDashboard.stopBackend",
+    "onCommand:realtimeTerminalDashboard.installBackendDependencies",
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -29,6 +31,10 @@
       {
         "command": "realtimeTerminalDashboard.stopBackend",
         "title": "Real-Time Terminal Dashboard: Stop Backend"
+      },
+      {
+        "command": "realtimeTerminalDashboard.installBackendDependencies",
+        "title": "Real-Time Terminal Dashboard: Install Backend Dependencies"
       }
     ],
     "configuration": {
