@@ -15,7 +15,7 @@
     "onCommand:realtimeTerminalDashboard.startBackend",
     "onCommand:realtimeTerminalDashboard.stopBackend"
   ],
-  "main": "./src/extension.js",
+  "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
@@ -48,7 +48,7 @@
     }
   },
   "scripts": {
-    "start": "echo \"No build required. Press F5 in VSCode from the workspace root.\"",
+    "start": "npm.cmd run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./"
   },

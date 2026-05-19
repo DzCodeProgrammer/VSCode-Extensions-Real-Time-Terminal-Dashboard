@@ -14,8 +14,8 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("realtimeTerminalDashboard.stopBackend", () => {
-      backend.stop();
+    vscode.commands.registerCommand("realtimeTerminalDashboard.stopBackend", async () => {
+      await backend.stop();
       vscode.window.showInformationMessage("Real-Time Terminal Dashboard backend stopped.");
     }),
   );

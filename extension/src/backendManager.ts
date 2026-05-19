@@ -41,26 +41,32 @@ export class BackendManager implements vscode.Disposable {
 
     this.process.stdout.on("data", (chunk: Buffer) => this.output.append(chunk.toString()));
     this.process.stderr.on("data", (chunk: Buffer) => this.output.append(chunk.toString()));
+    this.process.on("error", (error) => {
+      this.output.appendLine(`Backend launch failed: ${error.message}`);
+      vscode.window.showErrorMessage(`Dashboard backend failed to start: ${error.message}`);
+    });
     this.process.on("exit", (code) => {
       this.output.appendLine(`Backend exited with code ${code ?? "unknown"}`);
       this.process = undefined;
     });
 
     await this.waitUntilHealthy();
+    await this.appendBackendLog("VSCode extension connected to backend.");
   }
 
-  public stop(): void {
+  public async stop(): Promise<void> {
     if (!this.process) {
       return;
     }
 
+    await this.appendBackendLog("VSCode extension requested backend shutdown.");
     this.output.appendLine("Stopping backend.");
     this.process.kill();
     this.process = undefined;
   }
 
   public dispose(): void {
-    this.stop();
+    void this.stop();
     this.output.dispose();
   }
 
@@ -78,5 +84,17 @@ export class BackendManager implements vscode.Disposable {
     }
 
     vscode.window.showWarningMessage("Dashboard backend is starting slowly. Check the output channel for details.");
+  }
+
+  private async appendBackendLog(message: string): Promise<void> {
+    try {
+      await fetch(`${this.baseUrl}/api/telemetry/terminal`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stream: "system", message }),
+      });
+    } catch (error) {
+      this.output.appendLine(`Unable to append backend log: ${String(error)}`);
+    }
   }
 }

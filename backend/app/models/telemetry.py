@@ -49,6 +49,11 @@ class TerminalLogEntry(BaseModel):
     message: str
 
 
+class TerminalLogCreate(BaseModel):
+    stream: Literal["stdout", "stderr", "system"] = "system"
+    message: str = Field(min_length=1, max_length=1000)
+
+
 class TelemetrySnapshot(BaseModel):
     timestamp: datetime
     cpu: CpuSnapshot

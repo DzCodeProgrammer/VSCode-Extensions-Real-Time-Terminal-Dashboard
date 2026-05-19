@@ -8,7 +8,7 @@ from app.core.dependencies import (
     get_system_monitor,
     get_terminal_log_service,
 )
-from app.models.telemetry import TelemetrySnapshot
+from app.models.telemetry import TerminalLogCreate, TerminalLogEntry, TelemetrySnapshot
 from app.services.git_service import GitService
 from app.services.process_service import ProcessService
 from app.services.system_monitor import SystemMonitor
@@ -25,3 +25,11 @@ async def telemetry_snapshot(
     terminal_log_service: TerminalLogService = Depends(get_terminal_log_service),
 ) -> TelemetrySnapshot:
     return await monitor.collect(process_service, git_service, terminal_log_service)
+
+
+@router.post("/terminal", response_model=TerminalLogEntry)
+async def append_terminal_log(
+    payload: TerminalLogCreate,
+    terminal_log_service: TerminalLogService = Depends(get_terminal_log_service),
+) -> TerminalLogEntry:
+    return await terminal_log_service.append(payload.message, payload.stream)

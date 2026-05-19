@@ -76,12 +76,12 @@ Open `http://127.0.0.1:8765`.
 
 ## Run Extension
 
-Node.js is optional for local development now. Press `F5` in VSCode from the workspace root, then run `Real-Time Terminal Dashboard: Open Dashboard`.
+Press `F5` in VSCode from the workspace root, then run `Real-Time Terminal Dashboard: Open Dashboard`.
 
-If you later install Node.js and want TypeScript compile checks:
+On Windows PowerShell, use `npm.cmd` if `npm` is blocked by execution policy:
 
 ```powershell
 cd extension
-npm install
-npm run compile
+npm.cmd install
+npm.cmd run compile
 ```
