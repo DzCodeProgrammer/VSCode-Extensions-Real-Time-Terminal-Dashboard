@@ -1,23 +1,34 @@
 # Real-Time Terminal Dashboard
 
-Premium VSCode developer tool for realtime terminal, system, Git, and process observability.
+Premium VSCode developer tool for realtime terminal, system, Git, process, and network observability.
+
+The project combines a VSCode extension, a local FastAPI monitoring backend, WebSocket streams, and a cyberpunk HTMX dashboard. It is designed as a local developer tool: the backend binds to `127.0.0.1` and runs on the user machine.
+
+## Current Status
+
+- Local VSCode extension: ready for development/testing with `F5`.
+- GitHub repository: active and updated.
+- VSIX package workflow: ready.
+- Visual Studio Marketplace publish: prepared, but requires your publisher account and token.
+- Publishing cost: free. You only need a Microsoft/Azure DevOps account and Marketplace publisher.
 
 ## Architecture
-
-The project is split into strict layers:
 
 - `backend/app/services`: monitoring and domain logic.
 - `backend/app/routes`: REST and HTMX endpoints.
 - `backend/app/websockets`: realtime WebSocket streams.
-- `backend/app/templates` and `backend/app/static`: HTMX dashboard UI.
-- `extension/src`: VSCode extension lifecycle, commands, and webview bridge.
+- `backend/app/templates`: HTMX dashboard templates.
+- `backend/app/static`: dashboard CSS and vanilla JavaScript.
+- `extension/src`: VSCode extension lifecycle, commands, status bar, and webview bridge.
+- `extension/scripts`: packaging helper scripts.
 
 ## Performance Defaults
 
-- The chart uses a small custom canvas renderer instead of Chart.js.
-- `/ws/pulse` sends only CPU and RAM every 2 seconds for graphing.
+- The chart uses a lightweight custom canvas renderer instead of Chart.js.
+- `/ws/pulse` sends only CPU and RAM every 2 seconds.
 - Full telemetry updates are slower and bounded to reduce CPU pressure.
 - The browser pauses the pulse WebSocket when the dashboard tab is hidden.
+- Extension health checks use lightweight `/api/health` instead of full telemetry.
 
 ## File Tree
 
@@ -26,44 +37,29 @@ The project is split into strict layers:
 ├── backend/
 │   ├── app/
 │   │   ├── core/
-│   │   │   ├── config.py
-│   │   │   └── dependencies.py
 │   │   ├── models/
-│   │   │   └── telemetry.py
 │   │   ├── routes/
-│   │   │   ├── dashboard.py
-│   │   │   └── telemetry.py
 │   │   ├── services/
-│   │   │   ├── git_service.py
-│   │   │   ├── process_service.py
-│   │   │   ├── system_monitor.py
-│   │   │   └── terminal_log_service.py
 │   │   ├── static/
-│   │   │   ├── css/dashboard.css
-│   │   │   └── js/dashboard.js
 │   │   ├── templates/
-│   │   │   ├── dashboard.html
-│   │   │   └── partials.html
 │   │   ├── websockets/
-│   │   │   ├── manager.py
-│   │   │   └── telemetry_socket.py
 │   │   └── main.py
 │   ├── scripts/
 │   │   └── start-server.ps1
 │   └── requirements.txt
 ├── extension/
+│   ├── assets/
+│   ├── scripts/
 │   ├── src/
-│   │   ├── backendManager.ts
-│   │   ├── extension.ts
-│   │   └── webviewProvider.ts
 │   ├── package.json
+│   ├── README.md
 │   └── tsconfig.json
 └── .vscode/
     ├── launch.json
     └── tasks.json
 ```
 
-## Run Backend
+## Run Backend Manually
 
 ```powershell
 cd backend
@@ -72,22 +68,29 @@ python -m venv .venv
 .\scripts\start-server.ps1
 ```
 
-Open `http://127.0.0.1:8765`.
+Open:
 
-## Run Extension
+```text
+http://127.0.0.1:8765
+```
 
-Press `F5` in VSCode from the workspace root, then run `Real-Time Terminal Dashboard: Open Dashboard`.
-
-On Windows PowerShell, use `npm.cmd` if `npm` is blocked by execution policy:
+## Run Extension Locally
 
 ```powershell
 cd extension
 npm.cmd install
 npm.cmd run compile
 ```
+
+Then press `F5` in VSCode from the repository root and run:
+
+```text
+Real-Time Terminal Dashboard: Open Dashboard
+```
+
 ## VSCode Extension UX
 
-After pressing `F5`, the Extension Development Host shows a status bar item:
+Status bar states:
 
 - `Dashboard Offline`: backend is not reachable.
 - `Dashboard Starting`: backend launch is in progress.
@@ -106,14 +109,46 @@ Real-Time Terminal Dashboard: Install Backend Dependencies
 
 If `.venv` is missing, opening the dashboard offers to install backend dependencies automatically.
 
-## Marketplace Packaging
+## Build VSIX
 
-The VSCode Marketplace package is built from extension/. Run:
-
-`powershell
+```powershell
 cd extension
 npm.cmd install
 npm.cmd run package
-`
+```
 
-Publishing requires a Visual Studio Marketplace publisher named DzCodeProgrammer and a sce login token.
+The package script syncs `backend/` into `extension/backend`, compiles TypeScript, and creates:
+
+```text
+extension/real-time-terminal-dashboard.vsix
+```
+
+Test install locally:
+
+```powershell
+code --install-extension real-time-terminal-dashboard.vsix
+```
+
+## Publish To Marketplace
+
+Publishing to Visual Studio Code Marketplace is free.
+
+You need:
+
+- A Microsoft/Azure DevOps account.
+- A Visual Studio Marketplace publisher named `DzCodeProgrammer`.
+- A Personal Access Token with Marketplace Manage permission.
+
+Login and publish:
+
+```powershell
+cd extension
+npx vsce login DzCodeProgrammer
+npm.cmd run publish
+```
+
+## Repository
+
+```text
+https://github.com/DzCodeProgrammer/VSCode-Extensions-Real-Time-Terminal-Dashboard
+```

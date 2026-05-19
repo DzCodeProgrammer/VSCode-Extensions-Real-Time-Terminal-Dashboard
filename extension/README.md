@@ -55,9 +55,18 @@ npm.cmd run package
 
 The package script syncs the Python backend into `extension/backend`, compiles TypeScript, and creates `real-time-terminal-dashboard.vsix`.
 
+## Install VSIX Locally
+
+```powershell
+cd extension
+code --install-extension real-time-terminal-dashboard.vsix
+```
+
 ## Publish
 
-Before publishing, create a Visual Studio Marketplace publisher named `DzCodeProgrammer`, then login with a Personal Access Token:
+Publishing to the Visual Studio Code Marketplace is free.
+
+Before publishing, create a Visual Studio Marketplace publisher named `DzCodeProgrammer`, then login with a Personal Access Token. The token should include Marketplace Manage permission:
 
 ```powershell
 cd extension
