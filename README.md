@@ -105,3 +105,15 @@ Real-Time Terminal Dashboard: Install Backend Dependencies
 ```
 
 If `.venv` is missing, opening the dashboard offers to install backend dependencies automatically.
+
+## Marketplace Packaging
+
+The VSCode Marketplace package is built from extension/. Run:
+
+`powershell
+cd extension
+npm.cmd install
+npm.cmd run package
+`
+
+Publishing requires a Visual Studio Marketplace publisher named DzCodeProgrammer and a sce login token.

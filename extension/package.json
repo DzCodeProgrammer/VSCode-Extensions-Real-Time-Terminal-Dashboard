@@ -3,11 +3,36 @@
   "displayName": "Real-Time Terminal Dashboard",
   "description": "Realtime cyberpunk system, terminal, process, and Git telemetry for VSCode.",
   "version": "0.1.0",
-  "publisher": "local-devtools",
+  "publisher": "DzCodeProgrammer",
+  "license": "MIT",
+  "icon": "assets/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DzCodeProgrammer/VSCode-Extensions-Real-Time-Terminal-Dashboard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DzCodeProgrammer/VSCode-Extensions-Real-Time-Terminal-Dashboard/issues"
+  },
+  "homepage": "https://github.com/DzCodeProgrammer/VSCode-Extensions-Real-Time-Terminal-Dashboard#readme",
+  "keywords": [
+    "vscode",
+    "terminal",
+    "dashboard",
+    "monitoring",
+    "fastapi",
+    "websocket",
+    "htmx",
+    "devops"
+  ],
+  "galleryBanner": {
+    "color": "#06070d",
+    "theme": "dark"
+  },
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
+    "Visualization",
     "Other"
   ],
   "activationEvents": [
@@ -56,11 +81,15 @@
   "scripts": {
     "start": "npm.cmd run compile",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "sync-backend": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/sync-backend.ps1",
+    "package": "npm.cmd run sync-backend && npm.cmd run compile && vsce package --out real-time-terminal-dashboard.vsix",
+    "publish": "npm.cmd run sync-backend && npm.cmd run compile && vsce publish"
   },
   "devDependencies": {
     "@types/node": "^20.12.12",
     "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^3.2.1",
     "typescript": "^5.4.5"
   }
 }

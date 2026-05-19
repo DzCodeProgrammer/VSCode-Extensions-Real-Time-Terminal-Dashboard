@@ -1,0 +1,13 @@
+.vscode/**
+.vscode-test/**
+node_modules/**
+src/**
+out/**/*.map
+tsconfig.json
+*.vsix
+*.log
+backend/.venv/**
+backend/**/__pycache__/**
+backend/**/*.pyc
+backend/uvicorn.*.log
+scripts/**/*.tmp

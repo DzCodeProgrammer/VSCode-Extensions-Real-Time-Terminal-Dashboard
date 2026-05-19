@@ -5,3 +5,5 @@ uvicorn.*.log
 node_modules/
 out/
 *.vsix
+extension/backend/
+extension/real-time-terminal-dashboard.vsix

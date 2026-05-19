@@ -140,6 +140,11 @@ export class BackendManager implements vscode.Disposable {
   }
 
   private get backendPath(): string {
+    const packagedBackendPath = path.join(this.context.extensionPath, "backend");
+    if (fs.existsSync(packagedBackendPath)) {
+      return packagedBackendPath;
+    }
+
     return path.resolve(this.context.extensionPath, "..", "backend");
   }
 
